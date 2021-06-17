@@ -1,5 +1,6 @@
 var Db  = require('./dboperations');
-var order = require('./order');
+var profile = require('./profile');
+var admission = require('./admission');
 const dboperations = require('./dboperations');
 
 var express = require('express');
@@ -35,17 +36,41 @@ router.route('/orders/:id').get((request,response)=>{
 
 })
 
-router.route('/orders').post((request,response)=>{
+router.route('/profilelookup/:id').get((request,response)=>{
 
-    let order = {...request.body}
+   dboperations.getProfile(request.params.id).then(result => {
+      response.json(result[0]);
+   })
 
-    dboperations.addOrder(order).then(result => {
+})
+
+router.route('/listvalues/:id').get((request,response)=>{
+
+   dboperations.getListValues(request.params.id).then(result => {
+      response.json(result[0]);
+   })
+
+})
+
+router.route('/profile').post((request,response)=>{
+
+    let profile = {...request.body}
+
+    dboperations.addProfile(profile).then(result => {
        response.status(201).json(result);
     })
 
 })
 
+router.route('/admission').post((request,response)=>{
 
+   let admission = {...request.body}
+
+   dboperations.addAdmission(admission).then(result => {
+      response.status(201).json(result);
+   })
+
+})
 
 
 var port = process.env.PORT || 8090;
